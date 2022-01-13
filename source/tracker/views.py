@@ -48,3 +48,29 @@ class DeleteView(View):
         task = get_object_or_404(Task, pk=kwargs['pk'])
         task.delete()
         return redirect('index_view')
+
+
+class EditView(View):
+
+    def get(self, request, *args, **kwargs):
+        task = get_object_or_404(Task, pk=kwargs['pk'])
+        form = TaskForm(initial={
+            'summary': task.summary,
+            'description': task.description,
+            'status': task.status,
+            'type': task.type
+        })
+        return render(request, 'edit_view.html', {'task': task, 'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = TaskForm(data=request.POST)
+        task = get_object_or_404(Task, pk=kwargs['pk'])
+        if form.is_valid():
+            task.summary = form.cleaned_data.get('summary')
+            task.description = form.cleaned_data.get('description')
+            task.status = form.cleaned_data.get('status')
+            task.type = form.cleaned_data.get('type')
+            task.save()
+            return redirect('index_view')
+        return render(request, 'edit_view.html', {'task': task, 'form': form})
+
