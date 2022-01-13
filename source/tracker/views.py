@@ -8,9 +8,14 @@ from tracker.models import Task
 
 
 class IndexView(TemplateView):
-    def get(self, request, *args, **kwargs):
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
         tasks = Task.objects.all()
-        return render(request, 'index.html', {'tasks': tasks})
+        print(tasks)
+        kwargs['tasks'] = tasks
+        return super().get_context_data(**kwargs)
+
 
 
 class TaskView(TemplateView):
