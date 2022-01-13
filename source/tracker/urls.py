@@ -1,6 +1,6 @@
 from django.urls import path
-from tracker.views import index_view
+from tracker.views import IndexView
 
 urlpatterns = [
-    path('', index_view, name="index_view")
+    path('', IndexView.as_view(), name="index_view")
 ]
