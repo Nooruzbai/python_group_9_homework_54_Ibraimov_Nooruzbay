@@ -26,7 +26,7 @@
         <td>{{ task.date_created }}</td>
         <td>{{ task.date_updated}}</td>
     <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "task_view" task.pk %}"><i class="fas fa-info"></i></a></td>
-{#    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "delete_view" product.pk %}"><i class="fas fa-trash-alt"></i></a></td>#}
+    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "delete_view" task.pk %}"><i class="fas fa-trash-alt"></i></a></td>
 {#    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "edit_view" product.pk %}"><i class="far fa-edit"></i></a></td>#}
     </tr>
     {% endfor %}
