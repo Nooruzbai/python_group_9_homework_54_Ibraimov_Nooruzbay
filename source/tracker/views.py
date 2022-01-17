@@ -17,7 +17,6 @@ class IndexView(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-
 class TaskView(TemplateView):
     template_name = 'task_view.html'
 
@@ -63,7 +62,7 @@ class EditView(View):
             'summary': task.summary,
             'description': task.description,
             'status': task.status,
-            'type': task.type
+            'type': task.type.all()
         })
         return render(request, 'edit_view.html', {'task': task, 'form': form})
 
@@ -74,7 +73,7 @@ class EditView(View):
             task.summary = form.cleaned_data.get('summary')
             task.description = form.cleaned_data.get('description')
             task.status = form.cleaned_data.get('status')
-            task.type = form.cleaned_data.get('type')
+            task.type.set(form.cleaned_data.get('type'))
             task.save()
             return redirect('index_view')
         return render(request, 'edit_view.html', {'task': task, 'form': form})
