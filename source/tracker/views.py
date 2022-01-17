@@ -38,7 +38,8 @@ class CreateView(View):
             description = form.cleaned_data.get('description')
             status = form.cleaned_data.get('status')
             type = form.cleaned_data.get('type')
-            new_task = Task.objects.create(summary=summary, description=description, status=status, type=type)
+            new_task = Task.objects.create(summary=summary, description=description, status=status)
+            new_task.type.set(type)
             return redirect('index_view')
         return render(request, 'create_task.html', {'form': form})
 
