@@ -1,3 +1,4 @@
+from django.core.validators import MinLengthValidator
 from django.db import models
 
 # Create your models here.
@@ -29,7 +30,7 @@ class Type(models.Model):
 
 class Task(models.Model):
     summary = models.CharField(max_length=200, null=False, blank=False, verbose_name='Summary')
-    description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Description')
+    description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Description', validators=())
     status = models.ForeignKey('tracker.Status', on_delete=models.PROTECT, related_name='tasks', verbose_name="Status")
     type = models.ManyToManyField('tracker.Type', related_name='tasks', verbose_name='Type')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date created")
