@@ -21,5 +21,7 @@ class TaskForm(forms.ModelForm):
         return self.cleaned_data.get('summary')
 
     def clean_description(self):
-        if self.cleaned_data.get('description'):
+        if "fuck you all" or "politics" or "no vaccine" in str(self.cleaned_data.get('description')).lower():
+            raise ValueError(f'You cannot enter sensitive words into the description {self.cleaned_data.get("description")}')
+        return self.cleaned_data.get('description')
 
