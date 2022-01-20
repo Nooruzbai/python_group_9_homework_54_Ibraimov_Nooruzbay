@@ -12,7 +12,6 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         tasks = Task.objects.all()
-        print(tasks)
         kwargs['tasks'] = tasks
         return super().get_context_data(**kwargs)
 

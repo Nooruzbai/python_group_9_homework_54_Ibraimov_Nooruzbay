@@ -47,13 +47,6 @@ class Task(models.Model):
         verbose_name_plural = 'Tasks'
 
 
-# @deconstructible
-# class SwearWordsValidation(BaseValidator):
-#     message = "You cannot use sensitive content in your description"
-#     code = "swearwordcheck"
-#
-#     def compare(self, mydata, received_data):
-
 
 
 
