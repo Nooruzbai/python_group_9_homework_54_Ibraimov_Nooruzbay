@@ -1,7 +1,9 @@
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, BaseValidator
+
 from django.db import models
 
 # Create your models here.
+from django.utils.deconstruct import deconstructible
 
 
 class Status(models.Model):
@@ -43,3 +45,18 @@ class Task(models.Model):
         db_table = 'task'
         verbose_name = 'Task'
         verbose_name_plural = 'Tasks'
+
+
+# @deconstructible
+# class SwearWordsValidation(BaseValidator):
+#     message = "You cannot use sensitive content in your description"
+#     code = "swearwordcheck"
+#
+#     def compare(self, mydata, received_data):
+
+
+
+
+
+
+
