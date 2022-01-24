@@ -39,7 +39,7 @@ class Task(models.Model):
     date_updated = models.DateTimeField(auto_now=True, verbose_name="Date updated")
 
     def __str__(self):
-        return f'{self.pk}. {self.summary} {self.status}'
+        return f'{self.pk}. {self.summary} {self.status} {self.type}'
 
     class Meta:
         db_table = 'task'
