@@ -27,3 +27,6 @@ class TaskForm(forms.ModelForm):
             raise ValidationError(f'You cannot enter sensitive words into the description {self.cleaned_data.get("description")}')
         return self.cleaned_data.get('description')
 
+
+class SearchForm(forms.Form):
+    search = forms.CharField(max_length=30, required=False, label="Search")
