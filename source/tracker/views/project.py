@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.db.models import Q
 from tracker.forms import ProjectForm
@@ -24,6 +25,10 @@ class ProjectDetailView(DetailView):
 
 class ProjectCreateView(CreateView):
     form_class = ProjectForm
-    template_name = 'project_creat.html'
+    template_name = 'project/project_create.html'
+
+    def get_success_url(self):
+        return reverse('project_detail_view', kwargs={'pk': self.object.pk})
+
 
 
