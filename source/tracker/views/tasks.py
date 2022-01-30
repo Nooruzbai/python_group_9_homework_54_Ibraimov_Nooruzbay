@@ -43,7 +43,7 @@ class IndexView(ListView):
 
 
 class TaskView(TemplateView):
-    template_name = 'task_view.html'
+    template_name = 'task/details.html'
 
     def get_context_data(self, **kwargs):
         task = get_object_or_404(Task, pk=kwargs.get('pk'))
@@ -54,7 +54,7 @@ class TaskView(TemplateView):
 class CreateView(View):
     def get(self, request, *args, **kwargs ):
         form = TaskForm()
-        return render(request, 'create_task.html', {'form': form})
+        return render(request, 'task/create.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = TaskForm(data=request.POST)
@@ -66,13 +66,13 @@ class CreateView(View):
             new_task = Task.objects.create(summary=summary, description=description, status=status)
             new_task.type.set(type)
             return redirect('index_view')
-        return render(request, 'create_task.html', {'form': form})
+        return render(request, 'task/create.html', {'form': form})
 
 
 class DeleteView(View):
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
-        return render(request, 'delete_task.html', {'task': task})
+        return render(request, 'task/delete.html', {'task': task})
 
     def post(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
@@ -90,7 +90,7 @@ class EditView(View):
             'status': task.status,
             'type': task.type.all()
         })
-        return render(request, 'edit_view.html', {'task': task, 'form': form})
+        return render(request, 'task/edit.html', {'task': task, 'form': form})
 
     def post(self, request, *args, **kwargs):
         form = TaskForm(data=request.POST)
@@ -102,5 +102,5 @@ class EditView(View):
             task.type.set(form.cleaned_data.get('type'))
             task.save()
             return redirect('index_view')
-        return render(request, 'edit_view.html', {'task': task, 'form': form})
+        return render(request, 'task/edit.html', {'task': task, 'form': form})
 

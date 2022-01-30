@@ -1,5 +1,5 @@
 from django.urls import path
-from tracker.views import IndexView, TaskView, CreateView, DeleteView, EditView
+from tracker.views.tasks import IndexView, TaskView, CreateView, DeleteView, EditView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index_view'),
