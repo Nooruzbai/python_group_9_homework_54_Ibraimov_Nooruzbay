@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Task, Type
+from .models import Task, Type, Project
 
 
 class TaskForm(forms.ModelForm):
@@ -30,3 +30,11 @@ class TaskForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     search = forms.CharField(max_length=30, required=False, label="Search")
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = "__all__"
+        error_messages = {}
+
