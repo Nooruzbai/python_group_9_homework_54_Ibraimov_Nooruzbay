@@ -130,6 +130,7 @@ class TaskEditView(View):
             task.description = form.cleaned_data.get('description')
             task.status = form.cleaned_data.get('status')
             task.type.set(form.cleaned_data.get('type'))
+            task.project = form.cleaned_data.get('project')
             task.save()
             project_pk = task.project.pk
             return redirect(reverse('project_detail_view', kwargs={"pk": project_pk}))

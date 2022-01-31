@@ -4,7 +4,9 @@
 <div class="p-3">
     <a class="btn btn-primary btn-lg" href="{% url "task_create_view" %}">Create new task</a>
 </div>
-
+<div type="button" class="p-3">
+    <a href="{% url "project_list_view" %}" class="btn btn-primary">To all Projects</a>
+</div>
 <div class="search">
     {% include 'partial/simple_search.html' %}
 </div>
