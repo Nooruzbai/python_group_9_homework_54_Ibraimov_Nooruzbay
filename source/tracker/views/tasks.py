@@ -1,14 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import View, TemplateView, ListView
+from django.urls import reverse
+from django.views.generic import View, TemplateView, ListView, CreateView
 from django.db.models import Q
 from tracker.forms import TaskForm, SearchForm
-from tracker.models import Task
+from tracker.models import Task, Project
+
 
 # Create your views here.
 
 
-class IndexView(ListView):
-    template_name = 'index.html'
+class TaskIndexView(ListView):
+    template_name = 'task/task_index.html'
     model = Task
     paginate_by = 10
     paginate_orphans = 0
@@ -43,7 +45,7 @@ class IndexView(ListView):
 
 
 class TaskView(TemplateView):
-    template_name = 'task/details.html'
+    template_name = 'task/task_details.html'
 
     def get_context_data(self, **kwargs):
         task = get_object_or_404(Task, pk=kwargs.get('pk'))
@@ -51,33 +53,46 @@ class TaskView(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-class CreateView(View):
-    def get(self, request, *args, **kwargs ):
-        form = TaskForm()
-        return render(request, 'task/create.html', {'form': form})
+class TaskCreateView(CreateView):
+    model = Task
+    template_name = 'task/task_create.html'
+    form_class = TaskForm
 
-    def post(self, request, *args, **kwargs):
-        form = TaskForm(data=request.POST)
-        if form.is_valid():
-            summary = form.cleaned_data.get('summary')
-            description = form.cleaned_data.get('description')
-            status = form.cleaned_data.get('status')
-            type = form.cleaned_data.get('type')
-            new_task = Task.objects.create(summary=summary, description=description, status=status)
-            new_task.type.set(type)
-            return redirect('index_view')
-        return render(request, 'task/create.html', {'form': form})
+    def form_valid(self, form):
+        project = get_object_or_404(Project, pk=self.kwargs.get('pk'))
+
+        form.instance.project = project
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('project_detail_view', kwargs={"pk": self.object.project.pk})
+
+    # def get(self, request, *args, **kwargs ):
+    #     form = TaskForm()
+    #     return render(request, 'task/task_create.html', {'form': form})
+    #
+    # def post(self, request, *args, **kwargs):
+    #     form = TaskForm(data=request.POST)
+    #     if form.is_valid():
+    #         summary = form.cleaned_data.get('summary')
+    #         description = form.cleaned_data.get('description')
+    #         status = form.cleaned_data.get('status')
+    #         type = form.cleaned_data.get('type')
+    #         new_task = Task.objects.create(summary=summary, description=description, status=status)
+    #         new_task.type.set(type)
+    #         return redirect('index_view')
+    #     return render(request, 'task/task_create.html', {'form': form})
 
 
-class DeleteView(View):
+class TaskDeleteView(View):
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
-        return render(request, 'task/delete.html', {'task': task})
+        return render(request, 'task/task_delete.html', {'task': task})
 
     def post(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
         task.delete()
-        return redirect('index_view')
+        return redirect('project_list_view')
 
 
 class EditView(View):
@@ -90,7 +105,7 @@ class EditView(View):
             'status': task.status,
             'type': task.type.all()
         })
-        return render(request, 'task/edit.html', {'task': task, 'form': form})
+        return render(request, 'task/task_edit.html', {'task': task, 'form': form})
 
     def post(self, request, *args, **kwargs):
         form = TaskForm(data=request.POST)
@@ -102,5 +117,5 @@ class EditView(View):
             task.type.set(form.cleaned_data.get('type'))
             task.save()
             return redirect('index_view')
-        return render(request, 'task/edit.html', {'task': task, 'form': form})
+        return render(request, 'task/task_edit.html', {'task': task, 'form': form})
 
