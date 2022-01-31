@@ -4,13 +4,12 @@
 
 
 <div class="card pt-2">
-  <div class="card-header">{{ project.name }}
+  <div class="card-header fs-2">{{ project.name }}
   </div>
   <div class="card-body">
     <h5 class="card-title">{{ project.description}}</h5>
       <p class="card-text">{{ project.date_started }}</p>
       <p class="card-text">{{ project.date_closed }}</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
 </div>
 
@@ -46,7 +45,7 @@
         <td>{{ task.date_updated}}</td>
     <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "task_view" task.pk %}"><i class="fas fa-info"></i></a></td>
     <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "task_delete_view" task.pk %}"><i class="fas fa-trash-alt"></i></a></td>
-{#    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "edit_view" task.pk %}"><i class="far fa-edit"></i></a></td>#}
+    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "task_edit_view" task.pk %}"><i class="far fa-edit"></i></a></td>
 {#    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "task_view" product.pk %}"><i class="fas fa-info"></i></a></td>#}
 {#    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "delete_view" product.pk %}"><i class="fas fa-trash-alt"></i></a></td>#}
 {#    <td> <a class="btn btn-primary btn-sm ps-3 pe-3" href="{% url "edit_view" product.pk %}"><i class="far fa-edit"></i></a></td>#}

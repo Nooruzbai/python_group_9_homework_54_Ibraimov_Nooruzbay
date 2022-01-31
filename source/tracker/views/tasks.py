@@ -95,7 +95,7 @@ class TaskDeleteView(View):
         return redirect('project_list_view')
 
 
-class EditView(View):
+class TaskEditView(View):
 
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
@@ -116,6 +116,6 @@ class EditView(View):
             task.status = form.cleaned_data.get('status')
             task.type.set(form.cleaned_data.get('type'))
             task.save()
-            return redirect('index_view')
+            project_pk = task.project.pk
+            return redirect(reverse('project_detail_view', kwargs={"pk": project_pk}))
         return render(request, 'task/task_edit.html', {'task': task, 'form': form})
-

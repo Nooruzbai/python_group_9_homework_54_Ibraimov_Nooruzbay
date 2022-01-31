@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row pt-2">
+
+{% for project in projects %}
+  <div class="col-sm-6 p-2">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ project.name }}</h5>
+        <p class="card-text">{{ project.description }}</p>
+        <a href="{% url "project_detail_view" project.pk %}" class="btn btn-primary">Go to Details</a>
+          <a href="{% url "project_create_view" %}" class="btn btn-primary">Create Project</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+{% endblock %}
