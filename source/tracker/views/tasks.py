@@ -1,16 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import View, TemplateView, ListView, CreateView
 from django.db.models import Q
-from tracker.forms import TaskForm, SearchForm
+from tracker.forms import TaskForm, SearchForm, ProjectTaskForm
 from tracker.models import Task, Project
 
 
 # Create your views here.
 
 
-class TaskIndexView(ListView):
-    template_name = 'task/task_index.html'
+class TaskListView(ListView):
+    template_name = 'task/task_list_view.html'
     model = Task
     paginate_by = 10
     paginate_orphans = 0
@@ -53,19 +53,32 @@ class TaskView(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-class TaskCreateView(CreateView):
+class ProjectTaskCreateView(CreateView):
     model = Task
-    template_name = 'task/task_create.html'
-    form_class = TaskForm
+    template_name = 'project/project_task_create.html'
+    form_class = ProjectTaskForm
 
     def form_valid(self, form):
         project = get_object_or_404(Project, pk=self.kwargs.get('pk'))
-
         form.instance.project = project
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('project_detail_view', kwargs={"pk": self.object.project.pk})
+
+
+class TaskCreate(CreateView):
+    model = Task
+    template_name = 'task/task_create.html'
+    form_class = TaskForm
+    success_url = reverse_lazy('task_list_view')
+
+    # def get_success_url(self):
+    #     return redirect("task_list_view")
+
+    # def post(self, request, *args, **kwargs):
+    #     print(request.POST)
+    #     return super(TaskCreate, self).post(request, *args, **kwargs)
 
     # def get(self, request, *args, **kwargs ):
     #     form = TaskForm()
@@ -73,15 +86,17 @@ class TaskCreateView(CreateView):
     #
     # def post(self, request, *args, **kwargs):
     #     form = TaskForm(data=request.POST)
-    #     if form.is_valid():
-    #         summary = form.cleaned_data.get('summary')
-    #         description = form.cleaned_data.get('description')
-    #         status = form.cleaned_data.get('status')
-    #         type = form.cleaned_data.get('type')
-    #         new_task = Task.objects.create(summary=summary, description=description, status=status)
-    #         new_task.type.set(type)
-    #         return redirect('index_view')
-    #     return render(request, 'task/task_create.html', {'form': form})
+    #     print(form.data)
+    #     form.save()
+        # if form.is_valid():
+        #     summary = form.cleaned_data.get('summary')
+        #     description = form.cleaned_data.get('description')
+        #     status = form.cleaned_data.get('status')
+        #     type = form.cleaned_data.get('type')
+        #     new_task = Task.objects.create(summary=summary, description=description, status=status)
+        #     new_task.type.set(type)
+        # return redirect('task_list_view')
+        # return render(request, 'task/task_create.html', {'form': form})
 
 
 class TaskDeleteView(View):

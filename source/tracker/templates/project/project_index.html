@@ -5,6 +5,8 @@
 
 <div class="row pt-2">
 
+<div type="button"><a href="{% url "task_list_view" %}" class="btn btn-primary">To all Tasks</a></div>
+
 {% for project in projects %}
   <div class="col-sm-6 p-2">
     <div class="card">
