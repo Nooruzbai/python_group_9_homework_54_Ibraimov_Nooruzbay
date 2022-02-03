@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import View, TemplateView, ListView, CreateView
+from django.views.generic import View, TemplateView, ListView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 from tracker.forms import TaskForm, SearchForm, ProjectTaskForm
 from tracker.models import Task, Project
@@ -99,40 +99,55 @@ class TaskCreate(CreateView):
         # return render(request, 'task/task_create.html', {'form': form})
 
 
-class TaskDeleteView(View):
+class TaskDeleteView(DeleteView):
+    model = Task
+    template_name = 'task/task_delete.html'
 
-    def get(self, request, *args, **kwargs):
-        task = get_object_or_404(Task, pk=kwargs['pk'])
-        return render(request, 'task/task_delete.html', {'task': task})
-
-    def post(self, request, *args, **kwargs):
-        task = get_object_or_404(Task, pk=kwargs['pk'])
-        task.delete()
-        return redirect('project_list_view')
+    def get_success_url(self):
+        return reverse('project_detail_view', kwargs={'pk': self.object.project.pk})
 
 
-class TaskEditView(View):
+    # def get(self, request, *args, **kwargs):
+    #     task = get_object_or_404(Task, pk=kwargs['pk'])
+    #     return render(request, 'task/task_delete.html', {'task': task})
+    #
+    # def post(self, request, *args, **kwargs):
+    #     task = get_object_or_404(Task, pk=kwargs['pk'])
+    #     task.delete()
+    #     return redirect('project_list_view')
 
-    def get(self, request, *args, **kwargs):
-        task = get_object_or_404(Task, pk=kwargs['pk'])
-        form = TaskForm(initial={
-            'summary': task.summary,
-            'description': task.description,
-            'status': task.status,
-            'type': task.type.all()
-        })
-        return render(request, 'task/task_edit.html', {'task': task, 'form': form})
 
-    def post(self, request, *args, **kwargs):
-        form = TaskForm(data=request.POST)
-        task = get_object_or_404(Task, pk=kwargs['pk'])
-        if form.is_valid():
-            task.summary = form.cleaned_data.get('summary')
-            task.description = form.cleaned_data.get('description')
-            task.status = form.cleaned_data.get('status')
-            task.type.set(form.cleaned_data.get('type'))
-            task.project = form.cleaned_data.get('project')
-            task.save()
-            project_pk = task.project.pk
-            return redirect(reverse('project_detail_view', kwargs={"pk": project_pk}))
-        return render(request, 'task/task_edit.html', {'task': task, 'form': form})
+class TaskEditView(UpdateView):
+    model = Task
+    template_name = 'task/task_edit.html'
+    form_class = ProjectTaskForm
+    context_object_name = 'task'
+
+    def get_success_url(self):
+        return reverse('project_detail_view', kwargs={"pk": self.object.project.pk})
+
+# class TaskEditView(View):
+#
+#     def get(self, request, *args, **kwargs):
+#         task = get_object_or_404(Task, pk=kwargs['pk'])
+#         form = TaskForm(initial={
+#             'summary': task.summary,
+#             'description': task.description,
+#             'status': task.status,
+#             'type': task.type.all()
+#         })
+#         return render(request, 'task/task_edit.html', {'task': task, 'form': form})
+
+    # def post(self, request, *args, **kwargs):
+    #     form = TaskForm(data=request.POST)
+    #     task = get_object_or_404(Task, pk=kwargs['pk'])
+    #     if form.is_valid():
+    #         task.summary = form.cleaned_data.get('summary')
+    #         task.description = form.cleaned_data.get('description')
+    #         task.status = form.cleaned_data.get('status')
+    #         task.type.set(form.cleaned_data.get('type'))
+    #         task.project = form.cleaned_data.get('project')
+    #         task.save()
+    #         project_pk = task.project.pk
+    #         return redirect(reverse('project_detail_view', kwargs={"pk": project_pk}))
+    #     return render(request, 'task/task_edit.html', {'task': task, 'form': form})
