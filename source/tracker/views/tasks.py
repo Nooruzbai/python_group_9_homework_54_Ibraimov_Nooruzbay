@@ -100,6 +100,7 @@ class TaskCreate(CreateView):
 
 
 class TaskDeleteView(View):
+
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs['pk'])
         return render(request, 'task/task_delete.html', {'task': task})

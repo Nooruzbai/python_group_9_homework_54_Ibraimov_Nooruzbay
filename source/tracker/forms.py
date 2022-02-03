@@ -52,7 +52,6 @@ class TaskForm(forms.ModelForm):
         return self.cleaned_data.get('description')
 
 
-
 class SearchForm(forms.Form):
     search = forms.CharField(max_length=30, required=False, label="Search")
 
