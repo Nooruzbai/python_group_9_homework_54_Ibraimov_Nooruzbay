@@ -18,7 +18,6 @@ class ProjectDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tasks = self.get_object()
         tasks = self.get_object().tasks.order_by('-date_created')
         print(tasks)
         context['tasks'] = tasks
