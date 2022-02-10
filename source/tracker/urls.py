@@ -1,7 +1,11 @@
 from django.urls import path
-from tracker.views import TaskView, TaskDeleteView, ProjectDetailView, ProjectCreateView, \
-    TaskEditView, TaskListView, ProjectTaskCreateView, TaskCreate, ProjectUpdateView, ProjectDeleteView
-from tracker.views import ProjectListView
+from tracker.views import (TaskView, TaskDeleteView,
+                           ProjectDetailView, ProjectCreateView,
+                           TaskEditView, TaskListView, ProjectTaskCreateView,
+                           TaskCreate, ProjectUpdateView, ProjectDeleteView, ProjectListView, )
+
+
+# app_name = 'tracker'
 
 urlpatterns = [
     path('', ProjectListView.as_view(), name='project_list_view'),
